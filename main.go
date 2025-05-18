@@ -56,7 +56,7 @@ func main() {
 
 	jobs[0] = Job{
 		Title:        "Software Engineer",
-		Perusahaan:   "PT. Gobot Teknologi",
+		Perusahaan:   "PT. Gobot Teknologi Indonesia",
 		Deskripsi:    "Mengembangkan aplikasi web menggunakan Golang dan React",
 		Keywords:     [10]string{"golang", "react", "git", "agile", "backend", "frontend", "", "", "", ""},
 		KeywordCount: 6,
