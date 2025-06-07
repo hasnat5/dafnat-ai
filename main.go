@@ -115,7 +115,7 @@ func tampilkanMenuUtama(pilihan *int) {
 		" \n0. Keluar",
 		" \nPilihan Anda: ",
 	)
-	fmt.Scan(pilihan)
+	fmt.Scanln(pilihan)
 }
 
 func kelolaProfil(profile *UserProfile) {
@@ -535,7 +535,32 @@ func kelolaPendidikan(profile *UserProfile) {
 		fmt.Scanln(&pilihan)
 
 		if pilihan == 1 {
-			lihatPendidikan(*profile)
+			var isSorting bool = true
+			for isSorting {
+
+				fmt.Print("\n*** URUTKAN DAFTAR PEKERJAAN ***",
+					" \n1. Urutkan berdasarkan (Selection Sort)",
+					" \n2. Urutkan berdasarkan (Insertion Sort)",
+					" \n3. Urutkan berdasarkan default",
+					" \n0. Kembali",
+					" \nPilihan Anda: ",
+				)
+
+				var pilihan int = -1
+				fmt.Scan(&pilihan)
+
+				if pilihan == 1 {
+					selectionSortPendidikan(*profile, profile.EduCount)
+				} else if pilihan == 2 {
+					insertionSortPendidikan(*profile, profile.EduCount)
+				} else if pilihan == 3 {
+					lihatPendidikan(*profile)
+				} else if pilihan == 0 {
+					isSorting = false
+				} else {
+					fmt.Println("Pilihan tidak valid. Silakan coba lagi.")
+				}
+			}
 		} else if pilihan == 2 {
 			tambahPendidikan(profile)
 		} else if pilihan == 3 {
@@ -549,6 +574,50 @@ func kelolaPendidikan(profile *UserProfile) {
 		}
 
 	}
+}
+
+func selectionSortPendidikan(profile UserProfile, eduCount int) {
+	var i, idx, pass int
+	var temp Education
+
+	pass = 1
+	for pass < eduCount {
+		idx = pass - 1
+		i = pass
+		for i < eduCount {
+			if profile.Education[i].TahunLulus > profile.Education[idx].TahunLulus {
+				idx = i
+			}
+			i = i + 1
+		}
+
+		temp = profile.Education[pass-1]
+		profile.Education[pass-1] = profile.Education[idx]
+		profile.Education[idx] = temp
+
+		pass = pass + 1
+	}
+
+	lihatPendidikan(profile)
+}
+
+func insertionSortPendidikan(profile UserProfile, eduCount int) {
+	var i, pass int
+	var temp Education
+
+	pass = 1
+	for pass <= eduCount-1 {
+		i = pass
+		temp = profile.Education[pass]
+		for i > 0 && temp.TahunLulus > profile.Education[i-1].TahunLulus {
+			profile.Education[i] = profile.Education[i-1]
+			i = i - 1
+		}
+		profile.Education[i] = temp
+		pass = pass + 1
+	}
+
+	lihatPendidikan(profile)
 }
 
 func lihatPendidikan(profile UserProfile) {
@@ -1157,7 +1226,7 @@ func selectionSort(jobs tabJob, jobCount int) {
 	fmt.Println("\nDaftar Pekerjaan berdasarkan Relevansi (Tertinggi ke Terendah):")
 	fmt.Println("----------------------------------------------------------------")
 
-	for i := 0; i < jobCount; i++ {
+	for i = 0; i < jobCount; i++ {
 		fmt.Printf("%d. %s di %s\n", i+1, jobs[i].Title, jobs[i].Perusahaan)
 		fmt.Printf("   Relevansi: %d%%\n", jobs[i].Relevance)
 		fmt.Printf("   Gaji: Rp %d\n", jobs[i].Salary)
